@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./main.css">
+    <title>TOP Library Project</title>
+</head>
+<body>
+    <div class="container">
+        <h1>TOP Library Project</h1>
+        <h3>A tentative book-reading visual log</h3>
+        <div class="add-book">Add a book</div>
+        <div class="shelf">
+            <!-- books will go here, rendered by JavaScript -->
+            <div class="book">
+                <p class="info">Some Title</p>
+                <p class="info">X pages</p>
+                <p class="info">Some Author</p>
+                <p class="info">not read</p>
+            </div>
+        </div>
+
+        <form class="book-data">
+            <label for="title">Title</label>
+            <input class="title" type="text" required>
+            
+            <label for="pages">Number of pages</label>
+            <input class="pages" type="text" required>
+            
+            <label for="author">Author</label>
+            <input class="author" type="text" required>
+            
+            <label for="read">Did you finish reading it?</label>
+            <input type="radio" name="if-read" class="yes" required>
+            <lable for="yes">Yes</lable>
+            <input type="radio" name="if-read" class="no" required>
+            <lable for="no">No</lable>
+
+            <button type="submit">Add book</button>
+        </form>
+    </div>
+    
+    <script src="./script.js"></script>
+</body>
