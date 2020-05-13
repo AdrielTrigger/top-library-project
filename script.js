@@ -27,21 +27,37 @@ function removeBook(library,position) {
 
 function render(book,position) {
     let bookData = document.createElement('div');
+    let readStatus = document.createElement('p');
     bookData.classList.add('book');
 
-    for(i = 0; i < 4; i++) {
+    for(i = 0; i < 3; i++) {
         let info = document.createElement('p');
         if (i == 0) {
             info.textContent = book.title;
         } else if (i == 1) {
             info.textContent = book.pages;
-        } else if (i == 2) {
-            info.textContent = book.author;
         } else {
-            info.textContent = book.status;
+            info.textContent = book.author;
         }
         bookData.appendChild(info);
     }
+
+    readStatus.textContent = book.status;
+    bookData.appendChild(readStatus);
+
+    let changeStatus = document.createElement('button');
+    changeStatus.textContent = 'Change \'read\' status';
+    changeStatus.addEventListener('click', () => {
+        if (book.status == 'read') {
+            book.status = 'not read';
+            readStatus.textContent = book.status;
+        } else {
+            book.status = 'read';
+            readStatus.textContent = book.status;
+        }
+    });
+    bookData.appendChild(changeStatus);
+
     let removeBook = document.createElement('button');
     removeBook.textContent = 'Remove book';
     removeBook.addEventListener('click', () => {
@@ -49,6 +65,7 @@ function render(book,position) {
         myLibrary.splice(position,1);
     });
     bookData.appendChild(removeBook);
+
     shelf.appendChild(bookData);
 }
 
@@ -70,9 +87,9 @@ form.addEventListener('submit', (e) => {
     let no = document.querySelector('.no');
 
     if (yes.checked) {
-        status = 'yes';
+        status = 'read';
     } else if (no.checked) {
-        status = 'no';
+        status = 'not-read';
     }
 
     addBook(title,pages,author,status);
