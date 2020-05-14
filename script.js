@@ -3,6 +3,24 @@ let newBook = document.querySelector('.add-book');
 let form = document.querySelector('.book-data');
 let shelf = document.querySelector('.shelf');
 
+// Setter function to recover stored data
+function setData(library) {
+    for (i = 0; i < myLibrary.length; i++) {
+        render(myLibrary[i]);
+    }
+}
+
+if (storageAvailable(localStorage) && localStorage.getItem('savedLibrary')) {
+    let savedLibrary = localStorage.getItem('savedLibrary');
+    myLibrary = savedLibrary;
+    setData(myLibrary);
+}
+
+// Getter function to save data
+function getData(library) {
+    localStorage.setItem('savedLibrary', library);
+}
+
 // Book object constructor
 function Book(title,pages,author,status) {
     this.title = title;
@@ -18,6 +36,10 @@ function addBook(title,pages,author,status) {
     book.position = myLibrary.length;
     myLibrary.push(book);
     render(book,book.position);
+
+    if (storageAvailable('localStorage')) {
+        getData(myLibrary);
+    }
 }
 
 function removeBook(library,position) {
@@ -55,6 +77,9 @@ function render(book,position) {
             book.status = 'read';
             readStatus.textContent = book.status;
         }
+        if (storageAvailable('localStorage')) {
+            getData(myLibrary);
+        }
     });
     bookData.appendChild(changeStatus);
 
@@ -63,6 +88,9 @@ function render(book,position) {
     removeBook.addEventListener('click', () => {
         shelf.removeChild(bookData);
         myLibrary.splice(position,1);
+        if (storageAvailable('localStorage')) {
+            getData(myLibrary);
+        }
     });
     bookData.appendChild(removeBook);
 
@@ -97,3 +125,28 @@ form.addEventListener('submit', (e) => {
     form.reset();
     form.style.setProperty('display', 'none');
 });
+
+function storageAvailable(type) {
+    var storage;
+    try {
+        storage = window[type];
+        var x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
+    }
+}
